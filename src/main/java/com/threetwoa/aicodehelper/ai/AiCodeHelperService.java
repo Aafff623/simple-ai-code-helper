@@ -9,7 +9,7 @@ import dev.langchain4j.service.spring.AiService;
  * @Description: com.threetwoa.aicodehelper.ai
  * @version: 1.0
  */
-@AiService
+// @AiService
 public interface AiCodeHelperService {
 
     @SystemMessage(fromResource = "system-prompt.txt")

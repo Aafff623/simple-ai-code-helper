@@ -19,7 +19,19 @@ class AiCodeHelperApplicationTests {
      */
     @Test
     void chat() {
-        aiCodeHelper.chat("hi, 你是谁? 我是threetwoa, 告诉我一个通俗的趣味的 spring 的知识");
+        String result = aiCodeHelper.chat("hi, 你是谁? 我是threetwoa, 告诉我一个通俗的趣味的 spring 的知识");
+        System.out.println(result);
+    }
+
+    /**
+     * 测试会话记忆
+     */
+    @Test
+    void chatWithMemory() {
+        String result = aiCodeHelper.chat("hi, 你是谁? 我是threetwoa");
+        System.out.println(result);
+        result = aiCodeHelper.chat("hi, 我是谁来着?");
+        System.out.println(result);
     }
 
     /**

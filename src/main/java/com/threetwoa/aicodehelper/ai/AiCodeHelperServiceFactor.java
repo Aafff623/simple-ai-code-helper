@@ -1,5 +1,6 @@
 package com.threetwoa.aicodehelper.ai;
 
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.service.AiServices;
 import jakarta.annotation.Resource;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @Description: com.threetwoa.aicodehelper.ai
  * @version: 1.0
  */
-// @Configuration
+@Configuration
 public class AiCodeHelperServiceFactor {
 
     @Resource
@@ -24,7 +25,14 @@ public class AiCodeHelperServiceFactor {
      */
     @Bean
     public AiCodeHelperService aiCodeHelperService(){
-        return AiServices.create(AiCodeHelperService.class, qwenChatModel);
+        // 会话记忆 (设定最多每个用户支持 10 条)
+        MessageWindowChatMemory chatMemory = MessageWindowChatMemory.withMaxMessages(10);
+        // 构造 AI Service
+        AiCodeHelperService aiCodeHelperService = AiServices.builder(AiCodeHelperService.class)
+                .chatModel(qwenChatModel)
+                .chatMemory(chatMemory) // 会话记忆
+                .build();
+        return aiCodeHelperService;
     }
 
 
