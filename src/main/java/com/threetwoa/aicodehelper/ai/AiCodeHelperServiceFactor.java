@@ -2,6 +2,7 @@ package com.threetwoa.aicodehelper.ai;
 
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.service.AiServices;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,8 @@ public class AiCodeHelperServiceFactor {
 
     @Resource
     private ChatModel qwenChatModel;
+    @Resource
+    private ContentRetriever contentRetriever;
 
     /**
      * 创建 AI Service 的实现类,  使用 java 反射机制创建代理对象
@@ -31,6 +34,7 @@ public class AiCodeHelperServiceFactor {
         AiCodeHelperService aiCodeHelperService = AiServices.builder(AiCodeHelperService.class)
                 .chatModel(qwenChatModel)
                 .chatMemory(chatMemory) // 会话记忆
+                .contentRetriever(contentRetriever) // RAG 检索增强生成
                 .build();
         return aiCodeHelperService;
     }

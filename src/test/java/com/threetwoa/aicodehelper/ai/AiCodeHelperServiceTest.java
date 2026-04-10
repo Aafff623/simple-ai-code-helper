@@ -34,4 +34,13 @@ class AiCodeHelperServiceTest {
         System.out.println("学习报告:" + report);
     }
 
+    /**
+     * 利用 RAG 检索增强生成输出结果
+     */
+    @Test
+    void chatForRag() {
+        String userMessage = "你好, 我是 threetwoa, 我学习过 java spring, mysql,redis等, 准备校招面试了, 但是不知道高频面试题有哪些? ";
+        String result = aiCodeHelperService.chat(userMessage);
+        System.out.println("RAG 检索增强生成结果:" + result);
+    }
 }
