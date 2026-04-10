@@ -24,4 +24,14 @@ class AiCodeHelperServiceTest {
         System.out.println(result);
     }
 
+    /**
+     * 输出 学习报告 json 格式 (根据 Prompt 设计让大模型自动拆分)
+     */
+    @Test
+    void chatForReport() {
+        String userMessage = "你好, 我是 threetwoa, 我学习过 java spring, mysql 等, 帮我分析一下我的学习情况, 给我一些建议";
+        AiCodeHelperService.Report report = aiCodeHelperService.chatForReport(userMessage);
+        System.out.println("学习报告:" + report);
+    }
+
 }
