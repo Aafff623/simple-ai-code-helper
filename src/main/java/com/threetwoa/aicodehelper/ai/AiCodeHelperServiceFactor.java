@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @Description: com.threetwoa.aicodehelper.ai
  * @version: 1.0
  */
-@Configuration
+// @Configuration
 public class AiCodeHelperServiceFactor {
 
     @Resource
