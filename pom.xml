@@ -31,6 +31,14 @@
     </properties>
 
     <dependencies>
+<!--        lanchain4j 本身的依赖包-->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+
+        <!--        lanchain4j 整合了 大模型的依赖包-->
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-community-dashscope-spring-boot-starter</artifactId>
