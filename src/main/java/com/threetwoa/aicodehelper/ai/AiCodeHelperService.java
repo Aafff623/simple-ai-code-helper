@@ -1,5 +1,6 @@
 package com.threetwoa.aicodehelper.ai;
 
+import dev.langchain4j.service.Result;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.spring.AiService;
 
@@ -23,5 +24,9 @@ public interface AiCodeHelperService {
 
     // 学习报告
     record Report(String name, List<String> suggestionList) {};
+
+    // 返回封装好的 RAG 结果
+    @SystemMessage(fromResource = "system-prompt.txt")
+    Result<String> chatWithRag(String userMessage);
 
 }

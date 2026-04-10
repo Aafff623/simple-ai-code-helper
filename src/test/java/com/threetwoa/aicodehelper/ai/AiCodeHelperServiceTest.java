@@ -1,5 +1,6 @@
 package com.threetwoa.aicodehelper.ai;
 
+import dev.langchain4j.service.Result;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,7 +41,8 @@ class AiCodeHelperServiceTest {
     @Test
     void chatForRag() {
         String userMessage = "你好, 我是 threetwoa, 我学习过 java spring, mysql,redis等, 准备校招面试了, 但是不知道高频面试题有哪些? ";
-        String result = aiCodeHelperService.chat(userMessage);
-        System.out.println("RAG 检索增强生成结果:" + result);
+        Result<String> result = aiCodeHelperService.chatWithRag(userMessage);
+        System.out.println("RAG 检索参考来源" + result.sources());
+        System.out.println("RAG 检索增强生成结果:" + result.content());
     }
 }
