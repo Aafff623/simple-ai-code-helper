@@ -10,7 +10,6 @@ import java.util.Set;
 /**
  * 安全检测输入护轨 (使用自定义的护轨方式)
  */
-@InputGuardrails(SafeInputGuardrail.class)
 public class SafeInputGuardrail implements InputGuardrail {
 
     private static final Set<String> sensitiveWords = Set.of("kill", "evil");

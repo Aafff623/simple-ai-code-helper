@@ -1,7 +1,9 @@
 package com.threetwoa.aicodehelper.ai;
 
+import com.threetwoa.aicodehelper.ai.guardrail.SafeInputGuardrail;
 import dev.langchain4j.service.Result;
 import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.guardrail.InputGuardrails;
 import dev.langchain4j.service.spring.AiService;
 
 import java.lang.invoke.CallSite;
@@ -14,6 +16,7 @@ import java.util.List;
  * @version: 1.0
  */
 // @AiService
+@InputGuardrails(SafeInputGuardrail.class) // 使用自定义的输入护轨进行安全检测
 public interface AiCodeHelperService {
 
     @SystemMessage(fromResource = "system-prompt.txt")
