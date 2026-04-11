@@ -45,4 +45,25 @@ class AiCodeHelperServiceTest {
         System.out.println("RAG 检索参考来源" + result.sources());
         System.out.println("RAG 检索增强生成结果:" + result.content());
     }
+
+    /**
+     * 利用 tools calling 机制让 llm 大模型去调用 工具 (爬取网页)
+     */
+    @Test
+    void chatWithSearchTools() {
+        String userMessage = "有哪些常见的 面试题, 列出你爬取网站的来源? ";
+        String result = aiCodeHelperService.chat(userMessage);
+        System.out.println("工具调用结果:" + result);
+    }
+
+    /**
+     * 利用 mcp 机制 测试 llm 大模型的外部工具调用能力
+     */
+    @Test
+    void chatWithMcp() {
+        String userMessage = "有哪些常见的 面试题, 使用给你的mcp, 列出你爬取网站的来源? ";
+        String result = aiCodeHelperService.chat(userMessage);
+        System.out.println("Mcp 工具调用结果:" + result);
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.threetwoa.aicodehelper.ai;
 
+import com.threetwoa.aicodehelper.ai.tools.InterviewQuestionTool;
+import dev.langchain4j.mcp.McpToolProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
@@ -21,6 +23,8 @@ public class AiCodeHelperServiceFactor {
     private ChatModel qwenChatModel;
     @Resource
     private ContentRetriever contentRetriever;
+    @Resource
+    private McpToolProvider mcpToolProvider;
 
     /**
      * 创建 AI Service 的实现类,  使用 java 反射机制创建代理对象
@@ -35,6 +39,8 @@ public class AiCodeHelperServiceFactor {
                 .chatModel(qwenChatModel)
                 .chatMemory(chatMemory) // 会话记忆
                 .contentRetriever(contentRetriever) // RAG 检索增强生成
+                .tools(new InterviewQuestionTool())
+                .toolProvider(mcpToolProvider) // MCP 工具调用
                 .build();
         return aiCodeHelperService;
     }
