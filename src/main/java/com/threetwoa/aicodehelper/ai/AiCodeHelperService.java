@@ -1,10 +1,13 @@
 package com.threetwoa.aicodehelper.ai;
 
 import com.threetwoa.aicodehelper.ai.guardrail.SafeInputGuardrail;
+import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.Result;
 import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.guardrail.InputGuardrails;
 import dev.langchain4j.service.spring.AiService;
+import reactor.core.publisher.Flux;
 
 import java.lang.invoke.CallSite;
 import java.util.List;
@@ -31,5 +34,9 @@ public interface AiCodeHelperService {
     // 返回封装好的 RAG 结果
     @SystemMessage(fromResource = "system-prompt.txt")
     Result<String> chatWithRag(String userMessage);
+
+    // 流式对话输出 (参数注解: 实现用户会话隔离效果)
+    @SystemMessage(fromResource = "system-prompt.txt")
+    Flux<String> chatStream(@MemoryId int memoryId, @UserMessage String userMessage);
 
 }

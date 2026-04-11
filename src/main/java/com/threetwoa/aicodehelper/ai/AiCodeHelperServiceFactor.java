@@ -4,8 +4,10 @@ import com.threetwoa.aicodehelper.ai.tools.InterviewQuestionTool;
 import dev.langchain4j.mcp.McpToolProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.service.AiServices;
+import dev.langchain4j.service.MemoryId;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +27,8 @@ public class AiCodeHelperServiceFactor {
     private ContentRetriever contentRetriever;
     @Resource
     private McpToolProvider mcpToolProvider;
+    @Resource
+    private StreamingChatModel qwenStreamingChatModel;
 
     /**
      * 创建 AI Service 的实现类,  使用 java 反射机制创建代理对象
@@ -37,6 +41,8 @@ public class AiCodeHelperServiceFactor {
         // 构造 AI Service
         AiCodeHelperService aiCodeHelperService = AiServices.builder(AiCodeHelperService.class)
                 .chatModel(myQwenChatModel)
+                .streamingChatModel(qwenStreamingChatModel) // 流式输出支持
+                .chatMemoryProvider(MemoryId->MessageWindowChatMemory.withMaxMessages(10)) // 每个用户一个独立的会话记忆
                 .chatMemory(chatMemory) // 会话记忆
                 .contentRetriever(contentRetriever) // RAG 检索增强生成
                 .tools(new InterviewQuestionTool())
