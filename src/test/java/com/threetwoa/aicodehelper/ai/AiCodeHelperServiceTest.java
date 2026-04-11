@@ -66,4 +66,13 @@ class AiCodeHelperServiceTest {
         System.out.println("Mcp 工具调用结果:" + result);
     }
 
+    /**
+     * 敏感词 自定义护轨测试
+     */
+    @Test
+    void chatWithGuardRail() {
+        String userMessage = "kill, evil, 这些是什么?  ";
+        String result = aiCodeHelperService.chat(userMessage);
+        System.out.println("GuardRail 护轨检验的结果:" + result);
+    }
 }
