@@ -2,6 +2,9 @@ spring:
   application:
     name: ai-code-helper
   profiles:
+    # 真实密钥不要写在本文件（本文件会提交到 git）。
+    # 请复制 application-local.yml.example 为 application-local.yml 并填入真实值，
+    # application-local.yml 已被 .gitignore 忽略，可避免密钥泄露。
     active: local
 
 langchain4j:
@@ -9,6 +12,10 @@ langchain4j:
     dashscope:
       chat-model:
         model-name: qwen-max
-        api-key: <You API Key here>
+        # 阿里云百炼 DashScope API Key —— 请在 application-local.yml 中覆盖为真实值
+        api-key: <Your DashScope API Key here>
 
-
+# 智谱 BigModel 开放平台 API Key（供 McpConfig 的 web_search MCP 工具使用）
+# 缺失会导致启动时 ${bigmodel.api-key} 占位符解析失败 —— 请在 application-local.yml 中覆盖为真实值
+bigmodel:
+  api-key: <Your BigModel API Key here>

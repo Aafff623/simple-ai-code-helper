@@ -1,0 +1,23 @@
+# ============================================================
+# 本地私密配置模板（示例）
+# ------------------------------------------------------------
+# 用法：
+#   1. 复制本文件为同目录下的 application-local.yml
+#   2. 把下面的占位符替换为你的真实密钥
+#   3. application-local.yml 已被 .gitignore 忽略，不会提交，避免密钥泄露
+#
+# 说明：spring.profiles.active=local 时，本地配置会覆盖 application.yml 中的占位符。
+# ============================================================
+
+langchain4j:
+  community:
+    dashscope:
+      chat-model:
+        model-name: qwen-max
+        # 阿里云百炼控制台获取：https://bailian.console.aliyun.com/
+        api-key: sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# 智谱 BigModel 开放平台 Key（web_search MCP 工具使用）
+# 获取地址：https://open.bigmodel.cn/
+bigmodel:
+  api-key: xxxxxxxxxxxxxxxxxxxx.xxxxxxxx
