@@ -181,6 +181,16 @@ curl -N "http://localhost:8080/ai/chat?memoryId=1&message=如何准备Java并发
 
 ---
 
+## 产品预览
+
+当前仓库为纯后端 API，尚无前端界面，因此不提供 Preview/Showcase 实机截图。
+
+前端界面需求已产出（见 [`docs/output/prd/frontend-ui-requirements.md`](./docs/output/prd/frontend-ui-requirements.md)），处于 draft 阶段，待批准进入实施后，本节将补充 `preview-shell.png`（站点总览）与 `showcase-*.png`（对话主链路实机截图）。
+
+在此之前，可通过「API 说明」一节的 `curl` 示例直接体验流式对话效果。
+
+---
+
 ## RAG 知识库
 
 - 知识库位于 `src/main/resources/docs/`，目前包含 Java 基础面试题、AI 大模型面试题、简历指南三份资料。
