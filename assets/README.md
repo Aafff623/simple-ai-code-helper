@@ -30,5 +30,6 @@ assets/
 ## 本仓策略
 
 - 六张说明图已齐，Phase B **不强制重生图**（视觉方向见 `VISUAL-DIRECTION.md`）。  
-- 单产品应用：**省略 Preview Gallery**；以 **Showcase** 为主。  
-- `preview-contact-sheet.png` 保留作历史资产，不充当 `preview-shell.png`。
+- 单产品应用：**省略 Preview Gallery**；以 **Showcase** 为主（`showcase-home/chat/settings.png` 已齐）。  
+- `preview-contact-sheet.png` 保留作历史资产，不充当 `preview-shell.png`。  
+- 2026-08-05 gap-review：缺图清单为空，未调用生图工具。

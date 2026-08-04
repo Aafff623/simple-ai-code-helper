@@ -106,8 +106,8 @@ function Overview({
 
       <Callout tone="info" title="一句话结论">
         这是一个偏教学/示例完整度的 LangChain4j 全链路后端，外加一个可用的终端美学前端壳；对话主链路已切到
-        DeepSeek（OpenAI 兼容），Qwen/DashScope 主要服务 Embedding；README
-        仍写「纯后端 / Qwen 对话」，与现状不同步。
+        DeepSeek（OpenAI 兼容），Qwen/DashScope 主要服务 Embedding。README / CONTEXT
+        已在 project-init Full（`chore/maintain-assets`）对齐：非纯后端、默认对话非 Qwen。
       </Callout>
 
       <Grid columns={2} gap={12}>
@@ -270,7 +270,7 @@ function Directory() {
                 <Code>frontend/vite.config.js</Code> · 端口 5173
               </Text>
               <Text size="small">
-                <Code>README.md</Code> · 后端说明（部分过时）
+                <Code>README.md</Code> · DeepSeek + frontend + Showcase
               </Text>
               <Text size="small">
                 <Code>CONTEXT.md</Code> · 领域术语表
@@ -285,9 +285,9 @@ function Directory() {
           </CardBody>
         </Card>
       </Grid>
-      <Callout tone="warning" title="README 漂移">
-        README「产品预览」仍写仓库为纯后端、无前端；实际已有完整 frontend，且对话模型已切
-        DeepSeek。建议后续同步文档（本分析未改代码）。
+      <Callout tone="info" title="文档同步状态">
+        project-init Full 后：README / CONTEXT 已写明 Vite 前端与 DeepSeek 主对话；Preview
+        Gallery 省略、Showcase 三连已引用。本 Canvas 仍为只读架构评审（未改业务代码）。
       </Callout>
     </Stack>
   );
@@ -631,9 +631,9 @@ function Risks() {
           ],
           [
             "P2",
-            "README / CONTEXT 与实现漂移",
-            "新人误判模型与是否有前端",
-            "同步文档：DeepSeek 主对话 + frontend 存在",
+            "文档层曾与实现漂移（已修）",
+            "历史 README「纯后端 / Qwen 对话」误导新人",
+            "已在 chore/maintain-assets 对齐；后续改栈须同步 CONTEXT",
           ],
           [
             "P2",

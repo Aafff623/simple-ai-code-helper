@@ -82,3 +82,9 @@
 | 重建 | 否 | 已有可复用资产，不必推倒 |
 
 **轻量化判定**：**否**（用户授权非轻量化完整资产；补齐根入口、outputs、voice、ADR、README 壳、Showcase 槽位）。
+
+---
+
+## 续作（2026-08-05）
+
+细致 Review 见同目录 `2026-08-05-gap-review.md`：骨架已齐，主要修补 brief / handoff / README 路线图 / Canvas 中「纯后端 · Showcase 待补」文档漂移；契约图齐全故未重生图。

@@ -246,7 +246,8 @@ npm run dev
 
 ## 路线图（文档层）
 
-- [ ] 补齐 Showcase 真机三连截图  
+- [x] Showcase 真机三连截图（home / chat / settings）  
+- [x] project-init Full：根入口 · `docs/outputs` · README 预览壳 · 事实对齐 DeepSeek + frontend  
 - [ ] （可选）知识库改为 classpath / 可配置路径，支持 jar 运行  
 - [ ] （可选）会话消息持久化策略  
 

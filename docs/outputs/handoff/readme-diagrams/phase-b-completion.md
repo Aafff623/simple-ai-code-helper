@@ -1,29 +1,51 @@
-﻿## 任务
+﻿# handoff · readme-diagrams / project-init 收口
 
-完成 README 配图 Phase B 全流程并补齐 project-init 规范验收缺口。关联 theme：`readme-diagrams`。
+**分支**：`chore/maintain-assets`  
+**状态**：awaiting-review → 本轮查缺补齐后可 ship  
+**日期**：2026-08-05（覆盖式更新；取代「纯后端 / Showcase 待补」旧叙述）
+
+## 任务
+
+对照 `project-init` Full 验收清单做细致 Review，收口文档漂移；不改业务代码、不提交密钥。
 
 ## 上下文
 
-- PRD/方向稿：`docs/outputs/prd/readme-diagrams/VISUAL-DIRECTION.md`（视觉方向：Dark Editorial Computational Atlas）
-- 执行层：`docs/outputs/prd/readme-diagrams/readme-image-prompts.md`（六张图的 GPT image-to-image prompt）
-- 契约层（本次补录）：`docs/outputs/prd/readme-diagrams/readme-diagram-brief.md`
-- 目标：为纯后端项目的 README 生成六张统一视觉语言的配图，替代常见的"深色卡片 + 机械连线"模板
+- 调研：`docs/outputs/report/project-init/2026-08-04-five-dimension-research.md`
+- 本轮复核：`docs/outputs/report/project-init/2026-08-05-gap-review.md`
+- Canvas：`canvases/simple-ai-code-helper-analysis.canvas.tsx`
+- 视觉：`docs/outputs/prd/readme-diagrams/`（brief · prompts · VISUAL-DIRECTION）
+- 事实源：根 `CONTEXT.md` · `LANGUAGES.md` · `AGENTS.md`
 
-## 变更
+## 当前真相（勿再写反）
 
-1. 六张图（banner / features / architecture / tech-stack / workflow / structure）已生成并落盘 `assets/images/readme/`
-2. README.md 组装：页首 banner、各章节内嵌对应配图、新增「产品预览」章节说明当前无前端 Preview/Showcase
-3. 补录 `readme-diagram-brief.md`：规范要求 brief 先于 image-prompts 产出，本次事后补齐，标注为补录并与已有产物对齐，未重新设计
-4. 落地 `docs/agents/voice.md`：将 AGENTS.md/CLAUDE.md 中的 humanizer-output-style 引用固化为独立文件
+| 项 | 事实 |
+|----|------|
+| 产品形态 | 后端 `src/` + 前端 `frontend/`（Vite），**不是**纯后端 |
+| 默认对话 | DeepSeek；Qwen / DashScope 主要服务 Embedding |
+| Preview 站 | **省略**（单产品、无 Gallery） |
+| Showcase | **已齐**：`showcase-home/chat/settings.png` |
+| README 壳 | `preview-readme.*` · 端口 **8092** |
+| 六张说明图 | 已齐，本轮**不重生** |
+| 密钥 | `application-local.yml` 仅本机；已 gitignore，勿提交 |
+
+## 本轮变更
+
+1. 修正 `readme-diagram-brief.md` 验收项（去掉「无前端 / Showcase 不适用」误判）  
+2. 覆盖本 handoff，对齐 Full 迁移后现状  
+3. README 路线图：Showcase 三连标为已完成  
+4. Canvas：去掉「README 仍写纯后端」过时告警，改为文档已同步  
+5. 产出 gap-review 报告  
 
 ## 验证
 
-- 六张图确认已存在 `assets/images/readme/` 且文件名符合命名契约（`ls` 确认）
-- README.md 渲染检查：图片引用路径正确，章节顺序符合 brief 中的章节地图
-- 对照 `project-init` skill 验收清单逐项复核，Phase A 全绿，Phase B 缺口（brief 文档、voice.md）已补齐
+- [x] Phase A：五份 MDC 与用户级一致；根入口 / agents / adr / assets / voice 齐全  
+- [x] 无 `docs/agents/language.md` · `context.md`；无空 `.gitkeep` 媒体槽  
+- [x] `application-local.yml` 未 tracked  
+- [x] 契约图齐全；缺图清单为空 → **不调用** MiniMax / GenerateImage  
+- [x] Preview 省略理由 + Showcase 实图 + README 壳端口一致  
 
 ## 接手引导
 
-- 无后续代码改动待办；此 theme 视为完成
-- 若后续更换视觉方向，需同步更新 `VISUAL-DIRECTION.md` 与 `readme-diagram-brief.md` 两份文档，避免再次产生漂移
-- Preview/Showcase（`preview-shell.png`/`showcase-*.png`）留待 `frontend-ui-requirements.md` PRD 批准并实施后补充，当前不适用
+- 业务功能须走 `Issue → PRD → handoff`；本分支仅资产维护  
+- Canvas 中 P0/P1（memoryId 类型、BYOK SSRF、CORS 等）属代码债，**不在**本 init 收口范围  
+- 若更换视觉方向：同步 `VISUAL-DIRECTION.md` + brief + prompts，再决定是否重生说明图  
