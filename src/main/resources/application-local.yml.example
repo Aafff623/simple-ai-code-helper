@@ -15,7 +15,16 @@ langchain4j:
       chat-model:
         model-name: qwen-max
         # 阿里云百炼控制台获取：https://bailian.console.aliyun.com/
+        # 对话已改用 DeepSeek，此 Key 目前供 RAG 向量模型（qwenEmbeddingModel）使用
         api-key: sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# DeepSeek 对话模型（OpenAI 兼容 API）—— 前端流式对话使用
+# 当前模型名以 DeepSeek 官方 Models & Pricing 页面为准
+# 获取地址：https://platform.deepseek.com/
+deepseek:
+  base-url: https://api.deepseek.com
+  model-name: deepseek-v4-flash
+  api-key: sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 # 智谱 BigModel 开放平台 Key（web_search MCP 工具使用）
 # 获取地址：https://open.bigmodel.cn/

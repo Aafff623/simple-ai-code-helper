@@ -1,14 +1,28 @@
 # CONTEXT · 领域术语表
 
-本文件定义 **AI Code Helper** 项目的领域语言。所有 issue、PRD、重构提案、测试命名、假设描述都应使用此处的术语，避免漂移到同义词。新概念若不在表中，要么是在引入项目不使用的语言（请重新斟酌），要么是真实缺口（补充到此处）。
+本文件定义 **AI Code Helper** 的领域语言与技术事实。issue、PRD、重构提案、测试命名均以此为准。新概念若不在表中：要么是项目不用的语言（请改用现有词），要么是真实缺口（补到此处）。
 
-> 布局：单上下文（single-context）。本文件 + `docs/adr/` 位于仓库根目录。
+> 布局：单上下文（single-context）。本文件 + `docs/adr/`。  
+> 共享任务流用词见根 `LANGUAGES.md`（勿在 `docs/agents/` 再维护 language/context）。
 
 ---
 
 ## 项目一句话
 
-一个基于 Spring Boot + LangChain4j 的 **AI 编程面试助手**后端，围绕「编程学习路线、项目建议、求职全流程、高频面试题」四个方向，通过大模型对话 + RAG + 工具调用为用户提供帮助。
+基于 **Spring Boot + LangChain4j** 的 **AI 编程面试助手**：后端提供 SSE 流式对话、RAG、Tool Calling、MCP、会话记忆与输入护轨；前端为 Vite 原生 JS 对话壳，支持 BYOK（自带 Key）覆盖模型。
+
+---
+
+## 产品边界
+
+聚焦四个方向：
+
+1. 编程学习路线  
+2. 项目学习建议  
+3. 求职全流程（简历 / 投递）  
+4. 高频面试题与技巧  
+
+人设由 `src/main/resources/system-prompt.txt` 注入；演示类 `AiCodeHelper` 内另有硬编码副本（非 Controller 主路径）。
 
 ---
 
@@ -16,57 +30,102 @@
 
 | 术语 | 定义 |
 |------|------|
-| **助手 / AI 小助手** | 系统对外呈现的角色，由 `system-prompt.txt` 设定人设，聚焦编程学习与求职面试。 |
-| **会话（Session）** | 一次有上下文记忆的连续对话，由 `memoryId` 唯一标识；不同 `memoryId` 之间记忆相互隔离。 |
-| **知识库（Knowledge Base）** | `src/main/resources/docs/` 下的 Markdown 资料（面试题、简历指南），作为 RAG 的检索来源，是项目的核心**数据资产**。 |
-| **学习报告（Report）** | `chatForReport` 返回的结构化结果，含用户名与建议列表（`record Report(String name, List<String> suggestionList)`）。 |
+| **助手 / AI 小助手 / 面试助手** | 对外角色；由系统提示词设定，聚焦编程学习与求职面试。 |
+| **会话（Session）** | 一次有上下文记忆的连续对话，由 `memoryId` 标识；不同 ID 记忆隔离。 |
+| **知识库（Knowledge Base）** | `src/main/resources/docs/` 下 Markdown（面试题、简历指南），RAG 检索来源。 |
+| **学习报告（Report）** | `chatForReport` 的结构化结果：`record Report(String name, List<String> suggestionList)`。 |
+| **BYOK** | Bring Your Own Key：前端通过 `X-Model-Api-Key` / `X-Model-Base-Url` / `X-Model-Name` 覆盖默认对话模型。 |
+| **产品层根** | 后端 `src/`；前端 `frontend/`（非 monorepo 包管理，双目录并列）。 |
 
 ---
 
-## 技术领域词汇（LangChain4j 概念在本项目的具体含义）
+## 技术领域词汇
 
 | 术语 | 在本项目中的含义 | 代码位置 |
 |------|------------------|----------|
-| **AiService** | LangChain4j 声明式 AI 接口。本项目指 `AiCodeHelperService` 接口，通过注解声明系统提示词、护轨与各方法。**不使用** `@AiService` 自动扫描（已注释），改由工厂手动装配。 | `AiCodeHelperService` |
-| **工厂（Factory）** | 手动构建 AiService 实例的配置类，用 `AiServices.builder(...)` 串联 ChatModel、记忆、RAG、工具、MCP。注意拼写为 `Factor`（非 `Factory`）。 | `AiCodeHelperServiceFactor` |
-| **ChatModel** | 同步大模型。项目存在两个 Bean：`myQwenChatModel`（自定义、带监听器，工厂使用）与 starter 自动配置的 `qwenChatModel`（`AiCodeHelper` 示例类使用）。引用时务必区分。 | `QwenChatModelConfig` |
-| **StreamingChatModel** | 流式大模型 `qwenStreamingChatModel`（starter 自动配置），支撑 `chatStream` 的逐字输出。 | `AiCodeHelperServiceFactor` |
-| **RAG / 内容检索器（ContentRetriever）** | 检索增强生成。`RagConfig` 加载知识库 → 切段 → 向量化 → 检索，返回 Top 5、相似度 ≥ 0.75 的片段注入提示词。 | `RagConfig` |
-| **EmbeddingStore** | 向量存储。当前为内存实现，每次启动重建，不持久化。 | `RagConfig`（注入） |
-| **EmbeddingModel** | 文本向量化模型 `qwenEmbeddingModel`（starter 自动配置）。 | `RagConfig`（注入） |
-| **DocumentSplitter** | 文档切段器，本项目用 `DocumentByParagraphSplitter(1000, 200)`：按段落切，最大 1000 字符、重叠 200。 | `RagConfig` |
-| **ChatMemory / MemoryId** | 会话记忆。`MessageWindowChatMemory` 每会话保留最近 10 条；`@MemoryId` 注解实现按用户隔离。 | `AiCodeHelperServiceFactor` |
-| **Tool / 工具调用（Tool Calling）** | 大模型自主调用的本地方法。项目内置 `InterviewQuestionTool#searchInterviewQuestions`（`@Tool` 注解，Jsoup 爬取搜索页）。 | `InterviewQuestionTool` |
-| **McpToolProvider / MCP** | Model Context Protocol 外部工具。经 `HttpMcpTransport` 以 SSE 连接智谱 BigModel 的 web_search 服务。 | `McpConfig` |
-| **Guardrail / 输入护轨** | 请求进入大模型前的安全校验。`SafeInputGuardrail` 检测敏感词（`kill`/`evil`），命中返回 `fatal` 拦截。 | `SafeInputGuardrail` |
-| **ChatModelListener** | 大模型调用监听器，记录 `onRequest`/`onResponse`/`onError` 日志，用于调试。 | `ChatModelListenerConfig` |
-| **系统提示词（System Prompt）** | `system-prompt.txt`，经 `@SystemMessage(fromResource=...)` 注入。注意 `AiCodeHelper` 类内另有一份**硬编码**的等价提示词。 | `system-prompt.txt` |
-| **SSE / 流式输出** | Server-Sent Events。`AiController#chat` 返回 `Flux<ServerSentEvent<String>>`，逐块推送回答。 | `AiController` |
+| **AiService** | 声明式 AI 接口 `AiCodeHelperService`；不用 `@AiService` 自动扫描，由工厂手动装配。 | `AiCodeHelperService` |
+| **默认工厂** | `AiCodeHelperServiceFactor`（拼写缺 `y`，以源码为准）：装配 DeepSeek + Memory + RAG + Tool + MCP。 | `AiCodeHelperServiceFactor` |
+| **动态工厂** | `DynamicAiServiceFactory`：按 BYOK 参数缓存 AiService。 | `DynamicAiServiceFactory` |
+| **对话模型（默认）** | DeepSeek（OpenAI 兼容），配置前缀 `deepseek.*`，默认 `deepseek-v4-flash`。 | `DeepSeekChatModelConfig` |
+| **Embedding / 遗留 Chat** | DashScope Qwen：`qwenEmbeddingModel` 服务 RAG；`myQwenChatModel` / starter `qwenChatModel` 为遗留/演示路径。 | `QwenChatModelConfig` · starter |
+| **RAG / ContentRetriever** | 加载知识库 → 切段 → 向量化 → Top 5、相似度 ≥ 0.75。 | `RagConfig` |
+| **EmbeddingStore** | 内存实现，每次启动重建，不持久化。 | `RagConfig` |
+| **ChatMemory / MemoryId** | `MessageWindowChatMemory`，每会话最近 10 条。 | 工厂装配 |
+| **Tool** | `InterviewQuestionTool#searchInterviewQuestions`（Jsoup 爬公开搜索页）。 | `InterviewQuestionTool` |
+| **MCP** | 经 `HttpMcpTransport` SSE 连接智谱 BigModel `web_search`。 | `McpConfig` |
+| **Guardrail** | `SafeInputGuardrail` 敏感词（如 `kill`/`evil`）→ `fatal`。 | `SafeInputGuardrail` |
+| **SSE** | `AiController#chat` → `Flux<ServerSentEvent<String>>`；前端 `fetch` + ReadableStream。 | `AiController` · `frontend/app.js` |
+| **生产 API** | 唯一生产入口：`GET /ai/chat?memoryId=&message=`。 | `AiController` |
 
 ---
 
-## 关键命名约定（避免歧义）
+## 关键命名约定
 
-- **两个 ChatModel Bean**：`myQwenChatModel`（自定义带监听器）≠ `qwenChatModel`（starter 自动配置）。讨论「Qwen 模型」时必须指明是哪一个。
-- **两条对话实现路径**：`AiCodeHelperService`（接口，项目实际经 Controller 使用）≠ `AiCodeHelper`（类，直接调 ChatModel 的演示）。
-- **工厂类名**：源码中为 `AiCodeHelperServiceFactor`（缺 `y`），引用类名时以源码为准。
+- **两条对话路径**：`AiCodeHelperService`（Controller 使用）≠ `AiCodeHelper`（直接调 ChatModel 的演示）。
+- **多个 ChatModel Bean**：默认流式对话走 DeepSeek；`myQwenChatModel` ≠ starter `qwenChatModel`。讨论「用哪个模型」必须指明 Bean。
+- **工厂类名**：`AiCodeHelperServiceFactor`（缺 `y`）以源码为准。
+
+---
+
+## 技术栈事实
+
+| 层 | 选型 | 说明 |
+|----|------|------|
+| 运行时 | JDK 21 | |
+| 后端 | Spring Boot 3.5.13 Web | Maven Wrapper |
+| AI | LangChain4j 1.1.0 / beta7 | reactor · mcp · dashscope · open-ai |
+| 对话 | DeepSeek OpenAI 兼容 | `deepseek-v4-flash` 默认 |
+| 向量 | DashScope Qwen Embedding | starter 自动配置 |
+| 网页解析 | Jsoup 1.20.1 | Tool Calling |
+| 前端 | Vite ^6.3.5 + 原生 JS | 端口 5173；无 React/Vue |
+| 后端端口 | 8080 | |
 
 ---
 
 ## 配置约定
 
-| 配置项 | 用途 | 放置位置 |
-|--------|------|----------|
-| `langchain4j.community.dashscope.chat-model.model-name` | Qwen 模型名（`qwen-max`） | `application.yml` |
-| `langchain4j.community.dashscope.chat-model.api-key` | DashScope 密钥 | **真实值放 `application-local.yml`** |
-| `bigmodel.api-key` | 智谱 BigModel 密钥（MCP web_search） | **真实值放 `application-local.yml`** |
+| 配置项 | 用途 | 存放 |
+|--------|------|------|
+| `deepseek.*` | 流式/同步对话 | `application-local.yml` |
+| `langchain4j.community.dashscope.*` | Embedding / 遗留 Qwen Chat | `application-local.yml` |
+| `bigmodel.api-key` | 智谱 Web Search MCP | `application-local.yml` |
 
-- 真实密钥一律放入被 `.gitignore` 忽略的 `application-local.yml`；`application.yml` 仅保留占位符与说明。
-- 模板见 `application-local.yml.example`。
-- 激活 profile 固定为 `local`。
+- 真实密钥只放被 `.gitignore` 忽略的 `application-local.yml`。
+- 模板：`application-local.yml.example`。
+- `spring.profiles.active=local`。
+- RagConfig 以相对路径 `src/main/resources/docs` 加载语料 → **必须从仓库根启动**。
+
+---
+
+## 前端事实（产品壳）
+
+| 项 | 说明 |
+|----|------|
+| 入口 | `frontend/index.html` · `frontend/app.js` · `frontend/styles.css` |
+| 能力 | 会话列表、SSE 渲染、主题切换、模型设置弹窗、快捷提问 |
+| 持久化 | `localStorage`：`ai-helper-settings`、`ai-helper-conversations`（仅元数据，消息正文不落盘） |
+| BYOK 预设 | DeepSeek · 通义 · 智谱 · Moonshot · OpenAI · 硅基流动 |
+
+---
+
+## Preview / Showcase
+
+| 类型 | 本仓策略 |
+|------|----------|
+| **Preview 站** | **省略**：单产品应用，无组件库/多 demo 目录式预览壳。 |
+| **Showcase** | 以产品主链路实机截图为主（`assets/images/readme/showcase-*.png`）。 |
+| **README 预览壳** | 根目录 `preview-readme.{html,css,js}`，端口 **8092**（无 port-registry）。 |
 
 ---
 
 ## 架构决策（ADR）
 
-重要的架构权衡记录在 `docs/adr/`（当前尚无条目，按需在解决具体决策时新增）。若某项输出与既有 ADR 冲突，应显式指出而非默默覆盖。
+重要权衡记在 `docs/adr/`。采用 ADR 制度见 `docs/adr/0000-record-architecture-decisions.md`。与既有 ADR 冲突须显式指出。
+
+---
+
+## 已知限制
+
+- 内存向量库：重启重建，不持久化。
+- 知识库相对路径：打可执行 jar 后 `src/main/resources/docs` 相对路径不可用（待改进）。
+- 前端消息正文不落盘：刷新后侧栏有会话名，内容需重聊。

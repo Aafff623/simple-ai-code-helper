@@ -11,8 +11,9 @@
 | 类型 | 归档位置 |
 |------|----------|
 | 架构决策 | `docs/adr/000N-kebab-title.md`（永久保留，不删） |
-| 已完成 theme 的 PRD / handoff / report | 留在 `docs/output/{prd,handoff,report}/{theme}/`，标记完成状态 |
-| commit 攒批记录 | `docs/commit-history/` |
+| 已完成 theme 的 PRD / handoff / report | 留在 `docs/outputs/{prd,handoff,report}/{theme}/`，标记完成状态 |
+| commit 攒批记录 | `docs/outputs/commit-history/{branch}/` |
+| 已合并特性分支攒批 | 移入 `docs/outputs/commit-history/archive/{branch}/` |
 
 ## ADR 约定
 

@@ -13,7 +13,16 @@ langchain4j:
       chat-model:
         model-name: qwen-max
         # 阿里云百炼 DashScope API Key —— 请在 application-local.yml 中覆盖为真实值
+        # 注意：对话已改用 DeepSeek，此 Key 目前主要供 RAG 的向量模型（qwenEmbeddingModel）使用
         api-key: <Your DashScope API Key here>
+
+# DeepSeek 对话模型（OpenAI 兼容 API）—— 接管前端流式对话
+# 当前模型名以 DeepSeek 官方 Models & Pricing 页面为准
+# 真实 api-key 请在 application-local.yml 中覆盖为真实值
+deepseek:
+  base-url: https://api.deepseek.com
+  model-name: deepseek-v4-flash
+  api-key: <Your DeepSeek API Key here>
 
 # 智谱 BigModel 开放平台 API Key（供 McpConfig 的 web_search MCP 工具使用）
 # 缺失会导致启动时 ${bigmodel.api-key} 占位符解析失败 —— 请在 application-local.yml 中覆盖为真实值

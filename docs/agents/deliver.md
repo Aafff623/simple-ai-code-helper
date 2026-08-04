@@ -1,18 +1,18 @@
 # Deliver · 交付与交接（场景 A）
 
-场景 A：单任务交接。每个实施任务产出一份 handoff 文档，供 Review 与接手者快速进入上下文。
+场景 A：单任务交接。每个实施任务产出一份 handoff 文档，供 Review 与接手者快速进入上下文。本仓默认只启用场景 A。
 
 ## handoff 文档位置
 
-`docs/output/handoff/{theme}/{task}.md`
+`docs/outputs/handoff/{theme}/YYYY-MM-DD-{branch}-{task}.md`
 
-一任务一文件，文件名用 kebab-case 任务标识。
+一任务一文件；**覆盖式更新**：同任务新版本直接替换旧文件（删除旧路径，勿堆叠多份「最终版」）。
 
 ## handoff 文档结构
 
 ```
 ## 任务
-<!-- 一句话说明做什么，关联 Issue #N -->
+<!-- 一句话说明做什么，关联 Issue 路径 -->
 
 ## 上下文
 <!-- 相关文件、模块、依赖的现有状态 -->

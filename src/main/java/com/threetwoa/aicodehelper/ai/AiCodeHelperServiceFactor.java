@@ -22,13 +22,13 @@ import org.springframework.context.annotation.Configuration;
 public class AiCodeHelperServiceFactor {
 
     @Resource
-    private ChatModel myQwenChatModel;
+    private ChatModel deepSeekChatModel;
     @Resource
     private ContentRetriever contentRetriever;
     @Resource
     private McpToolProvider mcpToolProvider;
     @Resource
-    private StreamingChatModel qwenStreamingChatModel;
+    private StreamingChatModel deepSeekStreamingChatModel;
 
     /**
      * 创建 AI Service 的实现类,  使用 java 反射机制创建代理对象
@@ -40,8 +40,8 @@ public class AiCodeHelperServiceFactor {
         MessageWindowChatMemory chatMemory = MessageWindowChatMemory.withMaxMessages(10);
         // 构造 AI Service
         AiCodeHelperService aiCodeHelperService = AiServices.builder(AiCodeHelperService.class)
-                .chatModel(myQwenChatModel)
-                .streamingChatModel(qwenStreamingChatModel) // 流式输出支持
+                .chatModel(deepSeekChatModel)
+                .streamingChatModel(deepSeekStreamingChatModel) // 流式输出支持（DeepSeek）
                 .chatMemoryProvider(MemoryId->MessageWindowChatMemory.withMaxMessages(10)) // 每个用户一个独立的会话记忆
                 .chatMemory(chatMemory) // 会话记忆
                 .contentRetriever(contentRetriever) // RAG 检索增强生成

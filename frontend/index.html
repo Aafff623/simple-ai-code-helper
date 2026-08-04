@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0c0c0c" />
+  <title>面试助手 // AI CODE HELPER</title>
+  <link rel="stylesheet" href="assets/icons/tabler-icons.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app" id="app">
+
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <div class="brand">
+          <span class="brand-bracket">[</span>面试助手<span class="brand-bracket">]</span>
+        </div>
+        <button class="btn-icon" id="sidebarCollapse" aria-label="收起"><i class="ti ti-x"></i></button>
+      </div>
+
+      <button class="btn-new-chat" id="newChatButton">
+        <span>新建会话</span>
+        <i class="ti ti-plus"></i>
+      </button>
+
+      <div class="sidebar-search">
+        <i class="ti ti-search"></i>
+        <input id="conversationSearch" type="search" placeholder="SEARCH" />
+      </div>
+
+      <div class="sidebar-label">会话记录 / SESSIONS</div>
+      <nav class="conversation-list" id="conversationList"></nav>
+
+      <div class="sidebar-foot">LOCAL · NO TRACKING</div>
+    </aside>
+
+    <!-- 主区域 -->
+    <main class="main">
+      <header class="topbar">
+        <button class="btn-icon mobile-menu" id="mobileMenu" aria-label="菜单"><i class="ti ti-menu-2"></i></button>
+        <div class="topbar-title">
+          <span class="model-badge" id="modelBadge">◆ DEEPSEEK</span>
+          <span class="topbar-path">~/interview-helper</span>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn-icon" id="settingsButton" aria-label="模型设置"><i class="ti ti-settings"></i></button>
+          <button class="btn-icon" id="themeToggle" aria-label="主题"><i class="ti ti-contrast-2"></i></button>
+          <button class="btn-icon" id="clearChat" aria-label="清空"><i class="ti ti-trash"></i></button>
+        </div>
+      </header>
+
+      <section class="chat-area" id="chatStage">
+        <div class="conversation-view" id="conversationView"></div>
+      </section>
+
+      <section class="composer-section">
+        <div class="quick-prompts" id="quickPrompts">
+          <button data-prompt="请帮我规划一条 Java 后端开发学习路线">学习路线</button>
+          <button data-prompt="请根据我的基础给出一个项目学习建议">项目建议</button>
+          <button data-prompt="请给我一份求职全流程指南，包括简历和投递">求职指南</button>
+          <button data-prompt="请整理 Java 后端高频面试题与技巧">面试技巧</button>
+        </div>
+        <div class="composer" id="composer">
+          <span class="composer-prompt">&gt;</span>
+          <textarea id="messageInput" rows="1" maxlength="2000" placeholder="输入指令…"></textarea>
+          <button class="btn-send" id="sendButton" disabled><i class="ti ti-arrow-up"></i></button>
+        </div>
+      </section>
+    </main>
+
+    <div class="scrim" id="scrim"></div>
+    <div class="toast" id="toast" role="status"></div>
+
+    <!-- 模型配置弹窗 -->
+    <div class="modal-backdrop" id="settingsBackdrop">
+      <div class="modal" role="dialog" aria-label="模型配置" aria-modal="true">
+        <div class="modal-head">
+          <div class="modal-title">// 模型配置</div>
+          <button class="btn-icon" id="settingsClose" aria-label="关闭"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="modal-body">
+          <label class="field">
+            <span class="field-label">后端地址 <em>BACKEND</em></span>
+            <input id="cfgBackend" type="text" placeholder="http://localhost:8080" autocomplete="off" spellcheck="false" />
+            <span class="field-hint">Spring Boot 服务地址</span>
+          </label>
+
+          <div class="field-divider">选服务商 = 用你自己的 Key；选「默认」= 用后端配置</div>
+
+          <label class="field">
+            <span class="field-label">服务商 <em>PROVIDER</em></span>
+            <select id="cfgProvider"></select>
+            <span class="field-hint" id="cfgBaseUrlHint">使用后端 application-local.yml 中配置的模型</span>
+          </label>
+
+          <label class="field" id="cfgModelField" hidden>
+            <span class="field-label">模型 <em>MODEL</em></span>
+            <select id="cfgModel"></select>
+          </label>
+
+          <label class="field" id="cfgApiKeyField" hidden>
+            <span class="field-label">API KEY <em>SECRET</em></span>
+            <input id="cfgApiKey" type="password" placeholder="sk-..." autocomplete="off" spellcheck="false" />
+            <span class="field-hint">仅存于本机浏览器，随请求发送给后端</span>
+          </label>
+        </div>
+        <div class="modal-foot">
+          <button class="btn-ghost" id="settingsReset">重置</button>
+          <div class="modal-foot-right">
+            <button class="btn-ghost" id="settingsCancel">取消</button>
+            <button class="btn-solid" id="settingsSave">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 欢迎页 -->
+  <template id="emptyTemplate">
+    <div class="welcome">
+      <div class="welcome-tag">// AI CODE HELPER</div>
+      <h1>今天想<br>攻克什么？</h1>
+      <p class="welcome-sub">编程学习路线 · 项目实践 · 求职流程 · 面试题库</p>
+      <div class="welcome-cards">
+        <button data-prompt="请帮我规划一条 Java 后端开发学习路线">
+          <span class="card-no">01</span>
+          <strong>规划学习路线</strong>
+          <span class="card-desc">定制路径，梳理知识体系</span>
+        </button>
+        <button data-prompt="请根据我的基础给出一个项目学习建议">
+          <span class="card-no">02</span>
+          <strong>项目学习建议</strong>
+          <span class="card-desc">推荐项目，拆解技术要点</span>
+        </button>
+        <button data-prompt="请给我一份求职全流程指南，包括简历和投递">
+          <span class="card-no">03</span>
+          <strong>求职全流程</strong>
+          <span class="card-desc">简历优化到投递策略</span>
+        </button>
+        <button data-prompt="请整理 Java 后端高频面试题与技巧">
+          <span class="card-no">04</span>
+          <strong>高频面试题</strong>
+          <span class="card-desc">精选题目与答题框架</span>
+        </button>
+      </div>
+    </div>
+  </template>
+
+  <template id="chatTemplate">
+    <div class="chat-empty-note">
+      <i class="ti ti-message-off"></i>
+      <span>该会话的历史消息未在本地保存</span>
+      <em>继续输入即可开始新的对话</em>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Code Helper — README Preview</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.5.1/github-markdown-light.min.css" />
+  <link rel="stylesheet" href="preview-readme.css" />
+</head>
+<body>
+  <div class="toolbar">
+    <h1 id="toolbar-title">AI Code Helper · README Preview</h1>
+    <span id="toolbar-hint" class="hint">本地预览 <code>README.md</code>，改完点「重新加载」即可</span>
+    <button type="button" id="reload-btn">重新加载 README</button>
+    <a id="open-readme-link" href="./README.md" target="_blank" rel="noopener">打开 README.md</a>
+  </div>
+  <div id="status" class="status">正在加载 README…</div>
+  <div class="page">
+    <article id="content" class="markdown-body"></article>
+    <p id="footer-note" class="footer-note"></p>
+  </div>
+
+  <script>
+    // README 本地预览壳配置（端口 8092；本仓无 port-registry）
+    window.__PREVIEW_README__ = {
+      readmeFile: 'README.md',
+      pageLang: 'zh-CN',
+      title: 'AI Code Helper — README Preview',
+      toolbarTitle: 'AI Code Helper · README Preview',
+      hint: '本地预览 <code>README.md</code>，改完点「重新加载」即可，无需频繁 commit',
+      reloadLabel: '重新加载 README',
+      openLabel: '打开 README.md',
+      loading: '正在加载 README…',
+      loadedPrefix: '已加载',
+      fileProtocolError:
+        '请用本地 HTTP 服务打开（file:// 无法 fetch README）。在仓库根执行：python -m http.server 8092，然后访问 http://127.0.0.1:8092/preview-readme.html',
+      fetchError: '加载失败：',
+      footerNote:
+        '预览页：preview-readme.html · 端口 8092 · 配图：assets/images/readme/ · 本仓无 Preview Gallery，Showcase 见 showcase-* · 产品前端：frontend/（Vite 5173）',
+      activeLang: 'zh',
+      zhPage: 'preview-readme.html',
+      enPage: 'preview-readme.html',
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="preview-readme.js"></script>
+</body>
+</html>
